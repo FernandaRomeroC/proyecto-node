@@ -1,26 +1,45 @@
 import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
 
-// Configuracion de .env 
+/**
+ * CONFIGURACIÓN DE .ENV
+ */
 dotenv.config();
 
-// crear aplicacion
+
+/**
+ * CREACIÓN APP
+ */
 const app: Express = express();
 const port: string | number = process.env.PORT || 8000;
 
-// definir primera ruta de la app
+
+/**
+ * RUTAS
+ */
 app.get('/', (req: Request, res: Response) => {
     // enviar saludo
     res.send('App Express + TS + Swagger + Mongoose!');
 });
 
 app.get('/hello', (req: Request, res: Response) => {
-    // enviar saludo
-    res.send('Welcome a ruta hello!');
+    const name = req.query.name;
+    res.send(`Hola, ${name === undefined ? 'Desconocido' : name}`);
 });
 
-// Ejecutar app
+app.get('/despedida', (req: Request, res: Response) => {
+    const mensaje = {
+        message: 'Goodbye, world'
+    }
+    res.send(mensaje);
+})
+
+
+/**
+ * EJECUCIÓN DE APP
+ */
 app.listen(port, () => {
     console.log(`Express server: running al http://localhost:${port}`)
 });
+
 
