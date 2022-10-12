@@ -1,0 +1,8 @@
+{
+    "entryFile": "index.ts",
+    "noImplicitAddionalProperties": "throw-on-extras",
+    "spec": {
+        "outputDirectory": "public",
+        "specVersion": 3
+    }
+}

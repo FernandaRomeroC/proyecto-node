@@ -5,6 +5,6 @@ export interface IHelloController {
     getMessage(name?:string) : Promise<BasicResponse>;
 }
 
-export interface IGoodByeController {
+export interface IGoodbyeController {
     getMessage(name?:String):Promise<GoodbyeResponse>;
 }

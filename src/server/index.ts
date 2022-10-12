@@ -2,7 +2,7 @@ import express, { Express, Request, Response } from "express";
 
 //seguridad
 import cors from 'cors';
-import helmet from "helmet";
+import helmet from 'helmet';
 
 //todo HTTPS
 
@@ -16,6 +16,8 @@ const server: Express = express();
 //definir server use /api y ejecute el root router
 server.use('/api', rootRuter)
 
+//static server
+server.use(express.static('public'));
 
 //todo configuracion mongoose
 
