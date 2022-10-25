@@ -8,13 +8,13 @@ export const kataEntity = () => {
             name: String,
             descripcion: String,
             level: Number,
-            user: userEntity,
             date: Date,
             valoration: Number,
-            chaces: Number
+            chaces: Number,
+            validationNumber: Number
         }
     )
 
-    return mongoose.model('Katas', kataSchema);
+    return mongoose.models.katas || mongoose.model('katas', kataSchema);
 
 }
