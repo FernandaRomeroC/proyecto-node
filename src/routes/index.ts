@@ -9,6 +9,7 @@ import { LogInfo } from '../utils/logger';
 import goodbyeRouter from './GoodbyeRouter';
 import usersRouter from './UserRouter';
 import KatasRouter from './KatasRouter';
+import authRouter from './AuthRouter';
 
 //instancia del server
 let server = express();
@@ -28,4 +29,8 @@ server.use('/hello', helloRouter); //http://localhost:8000/api/hello
 server.use('/goodbye', goodbyeRouter);//http://localhost:8000/api/goodbye
 server.use('/users', usersRouter);//http://localhost:8000/api/users
 server.use('/katas', KatasRouter); //http://localhost:8000/api/katas
+
+//authentication routes
+server.use('/auth', authRouter); //http://localhost:8000/api/auth
+
 export default server;

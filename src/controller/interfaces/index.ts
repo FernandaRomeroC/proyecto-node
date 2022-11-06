@@ -1,3 +1,5 @@
+import { IAuth } from "../../domain/interfaces/IAuth.interface";
+import { IUser } from "../../domain/interfaces/IUser.interface";
 import { BasicResponse, GoodbyeResponse } from "../types";
 
 //name? significa que es opcional
@@ -29,4 +31,13 @@ export interface IKatasController {
     getKatasOrderValoration(): Promise<any>;
     getKatasOrderByChaces(): Promise<any>;
     updateValorationKata(id: string, valoration: string): Promise<any>;
+}
+
+export interface IAuthController {
+    //register user
+    registerUser(user: IUser) : Promise<any>;
+    //login user
+    loginUser(auth: IAuth): Promise<any>
+    //logout user
+    logoutUser(): Promise<any>;
 }

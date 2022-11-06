@@ -1,5 +1,6 @@
 import { userEntity } from "../entities/User.entity";
 import { LogSuccess, LogError } from "../../utils/logger";
+import { IUser } from "../interfaces/IUser.interface";
 
 
 //CRUD
@@ -55,7 +56,7 @@ export const createUser = async(user: any) : Promise<any | undefined> => {
 
 
 //update user by id
-export const updateUserById = async( id: string, user: any,): Promise<any | undefined> => {
+export const updateUserById = async( id: string, user: any): Promise<any | undefined> => {
     try{
         let userModel = userEntity();
         return await userModel.findByIdAndUpdate(id, user);

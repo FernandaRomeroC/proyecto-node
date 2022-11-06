@@ -1,7 +1,9 @@
 import { UserController } from "../controller/UsersController";
 import express, { Request, Response } from "express";
 import { LogInfo } from "../utils/logger";
+import { IUser } from "../domain/interfaces/IUser.interface";
 
+import bcrypt from "bcrypt";
 
 let usersRouter = express.Router();
 
@@ -20,7 +22,7 @@ usersRouter.route('/')
         const response = await controller.getUsers(id);
 
         //enviar respuesta
-        return res.send(response);
+        return res.status(200).send(response);
     })
 
     //DELETE
@@ -32,7 +34,7 @@ usersRouter.route('/')
 
         const response = await controller.deleteUserByID(id);
 
-        return res.send(response)
+        return res.status(response.status).send(response)
 
     })
 
@@ -49,7 +51,7 @@ usersRouter.route('/')
         
         const response = await controller.createUser(user);
 
-        return res.send(response)
+        return res.status(201).send(response)
     })
 
     //PUT
@@ -67,7 +69,19 @@ usersRouter.route('/')
         
         const response = await controller.updateUserById(id,user);
 
-        return res.send(response)
+        return res.status(response.status).send(response)
     })
 
+
+
 export default usersRouter;
+
+
+/**
+ * 
+ * GET Documents => 200 OK
+ * CREATION Documents => 201 OK
+ * DELETION of Documents => 200 (Entity) / 204 (No return)
+ * UPDATE of Documents => 200 (Entity) / 204 (No return)
+ * 
+ */ 
