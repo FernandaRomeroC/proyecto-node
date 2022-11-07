@@ -1,10 +1,9 @@
 import { Delete, Get, Post, Put, Query, Route, Tags } from "tsoa";
 import { IUsersController } from "./interfaces";
-import { LogSuccess, LogError } from "../utils/logger";
+import { LogSuccess } from "../utils/logger";
 
 //ORM - users collection
 import { createUser, deleteUserByID, getAllUsers, getUserByID, updateUserById } from "../domain/orm/User.orm";
-
 
 @Route("/api/users")
 @Tags("UserController")

@@ -2,14 +2,6 @@ import mongoose from "mongoose";
 import  {IUser} from "../interfaces/IUser.interface";
 
 export const userEntity = () => {
-    
-    // let userSchema = new mongoose.Schema(
-    //     {
-    //         name: String,
-    //         email: String,
-    //         age: Number
-    //     }
-    // )
 
     let userSchema2 = new mongoose.Schema<IUser>(
         {

@@ -1,17 +1,24 @@
-import { AuthController } from "@/controller/AuthController";
+import { AuthController } from "../controller/AuthController";
 import express, { Request, Response } from "express";
-import { LogInfo } from "../utils/logger";
 import { IUser } from "../domain/interfaces/IUser.interface";
 
 import bcrypt from "bcrypt";
 import { IAuth } from "../domain/interfaces/IAuth.interface";
 
+//para leer body 
+import bodyParser from "body-parser";
+
+//Midleware 
+import { verifyToken } from "../middlewares/verifyToken.middleware";
+import { Controller } from "tsoa";
+
+let jsonParser = bodyParser.json();
 let authRouter = express.Router();
 
-authRouter.route('/auth/register')
-    .post (async (req: Request, res: Response) => {
+authRouter.route('/register')
+    .post (jsonParser, async (req: Request, res: Response) => {
 
-        let {name, email, password, age} = req.body;
+        let {name, email, password, age} = req?.body;
         let hashedPassword = "";
 
         if (name && email && password && age){
@@ -30,13 +37,17 @@ authRouter.route('/auth/register')
             const response = await controller.registerUser(newUser);
 
             return res.status(200).send(response)
+        }else{
+            return res.status(400).send({
+                message: "[ERROR]No user can be registered"
+            })
         }
     })
 
-authRouter.route('/auth/login')
-    .post (async (req: Request, res: Response) => {
+authRouter.route('/login')
+    .post (jsonParser, async (req: Request, res: Response) => {
 
-        let {email, password} = req.body;
+        let {email, password} = req?.body;
         let hashedPassword = "";
 
         if (email && password){
@@ -51,8 +62,36 @@ authRouter.route('/auth/login')
             const controller: AuthController = new AuthController();
             const response = await controller.loginUser(auth);
             return res.status(200).send(response)
+        }else{
+            return res.status(400).send({
+                message: "[ERROR]No user can be found"
+            })
         }
+    });
+
+//Route protected by jwt
+authRouter.route('/me')
+    .get(verifyToken, async (req: Request, res: Response) => {
+        //obtener id del user
+        let id: any = req?.query?.id;
+
+        if (id){
+            //controlador
+            const controller: AuthController = new AuthController();
+
+            //obtain response
+            let response = await controller.userData(id);
+
+            return res.status(200).send(response);
+
+        }else{
+            return res.status(401).send({
+                message: "You are not authorised to perform this action"
+            })
+        }
+
     })
+
 
 
 export default authRouter;

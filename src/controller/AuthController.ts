@@ -6,13 +6,14 @@ import { LogSuccess, LogError, LogWarning } from "../utils/logger";
 import { IUser } from "../domain/interfaces/IUser.interface";
 import { IAuth } from "../domain/interfaces/IAuth.interface";
 import { loginUser, registerUser } from "../domain/orm/Auth.orm";
+import { AuthResponse, ErrorResponse } from "./types";
+import { getUserByID } from "../domain/orm/User.orm";
 
 
-@Route("/api/users")
+@Route("/api/auth")
 @Tags("AuthController")
 export class AuthController implements IAuthController {
-    
-   
+        
     @Post("/register")
     public async registerUser(user: IUser): Promise<any> {
         
@@ -43,7 +44,8 @@ export class AuthController implements IAuthController {
 
     @Post("/login")
     public async loginUser(auth: IAuth): Promise<any> {
-        let response = null;
+
+        let response: AuthResponse | ErrorResponse | undefined;
 
         if (auth) {
             LogSuccess(`[/api/auth/login] Register User ${auth}`);
@@ -51,18 +53,20 @@ export class AuthController implements IAuthController {
             await loginUser(auth)
                 .then((res) => {
                     response = {
-                        message: `User ${auth.email} logged in successfully`,
+                        message: `User ${res.user.name} logged in successfully`,
                         token: res.token
                     }
                 })
                 .catch((e) => {
                     response = {
+                        error:"NOT VALID",
                         message: e
                     }
                 })
         }else{
             LogWarning('[/api/auth/login] Login User Request without auth');
             response = {
+                error:"NOT VALID",
                 message: "Please, provide an auth"
             };
         }
@@ -73,6 +77,21 @@ export class AuthController implements IAuthController {
     @Post("/logout")
     logoutUser(): Promise<any> {
         throw new Error("Method not implemented.");
+    }
+
+    @Get("/me")
+    public async userData(@Query()id: string): Promise<any> {
+
+        let response = null;
+
+        LogSuccess(`[/api/users] Get User Data By ID: ${id}`);
+        response = await getUserByID(id);
+        
+        //no mostrar contraseña al response
+        response.password = "";
+
+        return response;
+        
     }
 }
 

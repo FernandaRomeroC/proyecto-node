@@ -3,30 +3,17 @@ import express, { Request, Response } from "express";
 import { LogInfo } from "../utils/logger";
 import { IUser } from "../domain/interfaces/IUser.interface";
 
-import bcrypt from "bcrypt";
+import bodyParser from "body-parser";
+import { verifyToken } from "../middlewares/verifyToken.middleware";
 
+
+let jsonParser = bodyParser.json();
 let usersRouter = express.Router();
 
 //GET http://localhost:8000/api/users?id=
 usersRouter.route('/')
-    //GET
-    .get(async (req: Request, res: Response) => {
-
-        let id: any = req?.query?.id;
-        LogInfo(`Query param ${id}`);
-
-        //instanciar controlador
-        const controller: UserController = new UserController();
-
-        //obtener respuesta
-        const response = await controller.getUsers(id);
-
-        //enviar respuesta
-        return res.status(200).send(response);
-    })
-
     //DELETE
-    .delete(async (req: Request, res: Response) => {
+    .delete(verifyToken, async (req: Request, res: Response) => {
         let id: any = req?.query?.id;
         LogInfo(`Query param ${id}`);
 
@@ -39,7 +26,7 @@ usersRouter.route('/')
     })
 
     //POST
-    .post(async (req: Request, res: Response) => {
+    .post(jsonParser, async (req: Request, res: Response) => {
         
         const controller: UserController = new UserController();
 
@@ -55,7 +42,7 @@ usersRouter.route('/')
     })
 
     //PUT
-    .put(async (req: Request, res: Response) => {
+    .put(verifyToken, async (req: Request, res: Response) => {
         let id: any = req?.query?.id;
         LogInfo(`Query param ${id}`);
 
