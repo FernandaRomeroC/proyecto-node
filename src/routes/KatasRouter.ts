@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 import { LogInfo } from "../utils/logger";
 import { KatasController } from "../controller/KatasController";
+import { verifyToken } from "../middlewares/verifyToken.middleware";
 
 
 let katasRouter = express.Router();
@@ -10,7 +11,7 @@ let katasRouter3 = express.Router();
 //GET http://localhost:8000/api/katas
 katasRouter.route('/')
     //GET
-    .get(async (req: Request, res: Response) => {
+    .get(verifyToken, async (req: Request, res: Response) => {
         let level: any = req?.query?.level;
         LogInfo(`Query param ${level}`);
         
@@ -25,7 +26,7 @@ katasRouter.route('/')
     })
 
     //PUT
-    .put(async (req: Request, res: Response) => {
+    .put(verifyToken, async (req: Request, res: Response) => {
         let id: any = req?.query?.id;
         LogInfo(`Query param ${id}`);
 
@@ -44,7 +45,7 @@ katasRouter.route('/')
 //GET http://localhost:8000/api/katas/valoration
 katasRouter.route('/valoration')
     //GET
-    .get(async (req: Request, res: Response) => {
+    .get(verifyToken, async (req: Request, res: Response) => {
                 
         //instanciar controlador
         const controller: KatasController = new KatasController();
@@ -60,7 +61,7 @@ katasRouter.route('/valoration')
 //GET http://localhost:8000/api/katas/chaces
 katasRouter.route('/chaces')
 //GET
-.get(async (req: Request, res: Response) => {
+.get(verifyToken, async (req: Request, res: Response) => {
             
     //instanciar controlador
     const controller: KatasController = new KatasController();
