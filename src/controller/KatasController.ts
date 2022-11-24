@@ -15,7 +15,7 @@ export class KatasController implements IKatasController {
      * @returns { any } All katas o katas found by level
      */
     @Get("/")
-    public async getKatas(@Query()level?: String): Promise<any> {
+    public async getKatas(@Query()page: number, @Query()limit: number, @Query()level?: String): Promise<any> {
         let response = null;
 
         if (level){
@@ -23,7 +23,7 @@ export class KatasController implements IKatasController {
             response = await getKatasByLevel(level);
         }else{
             LogSuccess(`[/api/katas] Get All Katas order by desc successfy`);
-            response = await getFiveKatasNewly();
+            response = await getFiveKatasNewly(page, limit);
         }
         return response;
         

@@ -1,6 +1,7 @@
 import { userEntity } from "../entities/User.entity";
 import { LogSuccess, LogError } from "../../utils/logger";
 import { IUser } from "../interfaces/IUser.interface";
+import { UserResponse } from "../types/UsersResponse.types";
 
 
 //CRUD
@@ -8,10 +9,30 @@ import { IUser } from "../interfaces/IUser.interface";
 /**
  * Method to obtain all users from collection "Users" in Mongo Server
  */
-export const getAllUsers = async(): Promise<any[] | undefined> => {
+export const getAllUsers = async(page: number, limit: number): Promise<any[] | undefined> => {
     try{
         let userModel = userEntity();
-        return await userModel.find({})
+        let response: any = {};
+
+        await userModel.find({isDelete: false})
+            .limit(limit)
+            .skip((page - 1) * limit)
+            .select('name email age') //es la projection en mongo
+            .exec()
+            .then((users: IUser[]) => {
+                /*users.forEach((user: IUser) => {
+                    user.password = ''
+                });*/
+                response.users = users;
+            })
+        
+        await userModel.countDocuments()
+            .then((total: number) => {
+                response.totalPages = Math.ceil(total / limit);
+                response.currentPage = page;
+            })
+        
+        return response;
     }
     catch (error){
         LogError(`[ORM ERROR]: Getting All users: ${error}`);

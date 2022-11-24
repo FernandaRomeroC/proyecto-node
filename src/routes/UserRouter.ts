@@ -59,6 +59,19 @@ usersRouter.route('/')
         return res.status(response.status).send(response)
     })
 
+    //GET
+    .get(verifyToken, async (req: Request, res: Response) => {
+        let id: any = req?.query?.id;
+        let page: any = req?.query?.page || 1;
+        let limit: any = req?.query?.limit || 10;
+
+        const controller: UserController = new UserController();
+       
+        const response = await controller.getUsers(page, limit, id)
+
+        return res.status(200).send(response)
+    })
+
 
 
 export default usersRouter;

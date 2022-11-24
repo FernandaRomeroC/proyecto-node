@@ -14,7 +14,7 @@ export class UserController implements IUsersController {
      * @returns { any } All user o user found by id
      */
     @Get("/")
-    public async getUsers(@Query()id?: string): Promise<any> {
+    public async getUsers(@Query()page: number, @Query()limit: number, @Query()id?: string): Promise<any> {
 
         let response = null;
 
@@ -22,8 +22,8 @@ export class UserController implements IUsersController {
             LogSuccess(`[/api/users] Get User By ID: ${id}`);
             response = await getUserByID(id);
         }else{
-            LogSuccess('[/api/users] Get User By ID');
-            response = await getAllUsers();
+            LogSuccess('[/api/users] Get User all');
+            response = await getAllUsers(page, limit);
         }
 
         return response;

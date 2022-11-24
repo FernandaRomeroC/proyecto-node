@@ -1,5 +1,6 @@
 import { LogSuccess, LogError } from "../../utils/logger";
 import { kataEntity } from "../entities/Kata.entity";
+import { IKatas } from "../interfaces/IKatas.interface";
 
 
 //CRUD
@@ -30,10 +31,28 @@ export const getKatasByLevel = async(level: String): Promise<any | undefined> =>
 }
 
 //Get five katas newly
-export const getFiveKatasNewly = async(): Promise<any | undefined> => {
+export const getFiveKatasNewly = async(page: number, limit: number): Promise<any | undefined> => {
     try{
-        let katasModel = kataEntity();
-        return await katasModel.find({}).sort({_id: -1}).limit(5);
+        let kataModel = kataEntity();
+        let response: any = {};
+
+        await kataModel.find({isDelete: false})
+            .sort({_id: -1})
+            .limit(limit)
+            .skip((page - 1) * limit)
+            .select('name email age') //es la projection en mongo
+            .exec()
+            .then((katas: IKatas[]) => {
+                response.katas = katas;
+            })
+        
+        await kataModel.countDocuments()
+            .then((total: number) => {
+                response.totalPages = Math.ceil(total / limit);
+                response.currentPage = page;
+            })
+        
+        return response;
     }
     catch (error){
         LogError(`[ORM ERROR]: Getting katas by level: ${error}`);

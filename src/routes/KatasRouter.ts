@@ -13,13 +13,16 @@ katasRouter.route('/')
     //GET
     .get(verifyToken, async (req: Request, res: Response) => {
         let level: any = req?.query?.level;
+        let page: any = req?.query?.page || 1;
+        let limit: any = req?.query?.limit || 10;
+
         LogInfo(`Query param ${level}`);
         
         //instanciar controlador
         const controller: KatasController = new KatasController();
 
         //obtener respuesta
-        const response = await controller.getKatas(level);
+        const response = await controller.getKatas(page, limit, level);
 
         //enviar respuesta
         return res.send(response);

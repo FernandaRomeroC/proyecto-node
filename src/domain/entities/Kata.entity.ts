@@ -5,13 +5,13 @@ export const kataEntity = () => {
     
     let kataSchema = new mongoose.Schema(
         {
-            name: String,
-            descripcion: String,
-            level: Number,
-            date: Date,
-            valoration: Number,
-            chaces: Number,
-            validationNumber: Number
+            name: {type: String, required: true},
+            descripcion: {type: String, required: true},
+            level: {type: Number, required: true},
+            date: {type: Date, required: true},
+            valoration: {type: Number, required: true},
+            chaces: {type: Number, required: true},
+            validationNumber: {type: Number, required: true}
         }
     )
 
